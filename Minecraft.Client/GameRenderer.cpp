@@ -30,7 +30,7 @@
 #include "..\Minecraft.World\System.h"
 #include "..\Minecraft.World\FloatBuffer.h"
 #include "..\Minecraft.World\ThreadName.h"
-#include "..\Minecraft.World\SparseLightStorage.h"i
+#include "..\Minecraft.World\SparseLightStorage.h"
 #include "..\Minecraft.World\CompressedTileStorage.h"
 #include "..\Minecraft.World\SparseDataStorage.h"
 #include "..\Minecraft.World\JavaMath.h"
