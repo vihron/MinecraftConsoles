@@ -10,6 +10,15 @@ namespace
     constexpr int FOV_MIN = 70;
     constexpr int FOV_MAX = 110;
     constexpr int FOV_SLIDER_MAX = 100;
+	constexpr int fpsCaps[] = { 30, 60, 120, 0 };
+
+	void formatFpsCapLabel(WCHAR* buf, int idx)
+	{
+		if (fpsCaps[idx] == 0)
+			swprintf(buf, 256, L"Max Framerate: Unlimited");
+		else
+			swprintf(buf, 256, L"Max Framerate: %d", fpsCaps[idx]);
+	}
 
 	int ClampFov(int value)
 	{
@@ -62,8 +71,10 @@ UIScene_SettingsGraphicsMenu::UIScene_SettingsGraphicsMenu(int iPad, void *initD
 	m_checkboxClouds.init(app.GetString(IDS_CHECKBOX_RENDER_CLOUDS),eControl_Clouds,(app.GetGameSettings(m_iPad,eGameSetting_Clouds)!=0));
 	m_checkboxBedrockFog.init(app.GetString(IDS_CHECKBOX_RENDER_BEDROCKFOG),eControl_BedrockFog,(app.GetGameSettings(m_iPad,eGameSetting_BedrockFog)!=0));
 	m_checkboxCustomSkinAnim.init(app.GetString(IDS_CHECKBOX_CUSTOM_SKIN_ANIM),eControl_CustomSkinAnim,(app.GetGameSettings(m_iPad,eGameSetting_CustomSkinAnim)!=0));
+	m_checkboxVSync.init(L"VSync",eControl_VSync,(app.GetGameSettings(m_iPad,eGameSetting_VSync)!=0));
 
 	
+
 	WCHAR TempString[256];
 
 	swprintf(TempString, 256, L"Render Distance: %d",app.GetGameSettings(m_iPad,eGameSetting_RenderDistance));	
@@ -79,6 +90,11 @@ UIScene_SettingsGraphicsMenu::UIScene_SettingsGraphicsMenu(int iPad, void *initD
 	
 	swprintf( TempString, 256, L"%ls: %d%%", app.GetString( IDS_SLIDER_INTERFACEOPACITY ),app.GetGameSettings(m_iPad,eGameSetting_InterfaceOpacity));	
 	m_sliderInterfaceOpacity.init(TempString,eControl_InterfaceOpacity,0,100,app.GetGameSettings(m_iPad,eGameSetting_InterfaceOpacity));
+
+	int fpsCapIndex = (int)app.GetGameSettings(m_iPad, eGameSetting_FpsCap);
+	if (fpsCapIndex < 0 || fpsCapIndex > 3) fpsCapIndex = 1;
+	formatFpsCapLabel(TempString, fpsCapIndex);
+	m_sliderFpsCap.init(TempString, eControl_FpsCap, 0, 3, fpsCapIndex);
 
 	doHorizontalResizeCheck();
 
@@ -165,6 +181,7 @@ void UIScene_SettingsGraphicsMenu::handleInput(int iPad, int key, bool repeat, b
 			app.SetGameSettings(m_iPad,eGameSetting_Clouds,m_checkboxClouds.IsChecked()?1:0);
 			app.SetGameSettings(m_iPad,eGameSetting_BedrockFog,m_checkboxBedrockFog.IsChecked()?1:0);
 			app.SetGameSettings(m_iPad,eGameSetting_CustomSkinAnim,m_checkboxCustomSkinAnim.IsChecked()?1:0);
+			app.SetGameSettings(m_iPad,eGameSetting_VSync,m_checkboxVSync.IsChecked()?1:0);
 
 			navigateBack();
 			handled = true;
@@ -236,5 +253,17 @@ void UIScene_SettingsGraphicsMenu::handleSliderMove(F64 sliderId, F64 currentVal
 		m_sliderInterfaceOpacity.setLabel(TempString);
 
 		break;
+
+	case eControl_FpsCap:
+	{
+		int idx = value;
+		if (idx < 0) idx = 0;
+		if (idx > 3) idx = 3;
+		m_sliderFpsCap.handleSliderMove(idx);
+		app.SetGameSettings(m_iPad, eGameSetting_FpsCap, idx);
+		formatFpsCapLabel(TempString, idx);
+		m_sliderFpsCap.setLabel(TempString);
+	}
+	break;
 	}
 }

@@ -133,6 +133,8 @@ enum eGameSetting
 {
 	eGameSetting_MusicVolume=0,
 	eGameSetting_SoundFXVolume,
+	eGameSetting_FpsCap,
+	eGameSetting_VSync,
 	eGameSetting_RenderDistance,
 	eGameSetting_Gamma,
 	eGameSetting_FOV,
@@ -157,30 +159,22 @@ enum eGameSetting
 	eGameSetting_InviteOnly,
 	eGameSetting_FriendsOfFriends,
 	eGameSetting_DisplayUpdateMessage,
-
 	// TU6
 	eGameSetting_BedrockFog,
 	eGameSetting_DisplayHUD,
 	eGameSetting_DisplayHand,
-
 	// TU7
 	eGameSetting_CustomSkinAnim,
-
 	// TU9
 	eGameSetting_DeathMessages,
 	eGameSetting_UISize,
 	eGameSetting_UISizeSplitscreen,
 	eGameSetting_AnimatedCharacter,
-
 	// PS3
 	eGameSetting_PS3_EULA_Read,
-
 	// PSVita
 	eGameSetting_PSVita_NetworkModeAdhoc,
-
-
 };
-
 
 
 enum eGameMode

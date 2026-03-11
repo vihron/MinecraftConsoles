@@ -2240,11 +2240,11 @@ FloatBuffer *GameRenderer::getBuffer(float a, float b, float c, float d)
 
 int GameRenderer::getFpsCap(int option)
 {
-	int maxFps = 200;
-	if (option == 1) maxFps = 120;
-	if (option == 2) maxFps = 35;
-	return maxFps;
+    static const int fpsCaps[] = {30, 60, 120, 0};
+    if (option < 0 || option > 3) return 0;
+    return fpsCaps[option];
 }
+
 
 void GameRenderer::updateAllChunks()
 {
